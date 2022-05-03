@@ -58,7 +58,13 @@ class AuthMethods{
       }else{
         res = 'Completa todos los campos';
       }
-    } catch(err){
+    } on FirebaseAuthException catch (e){
+      if(e.code == 'wrong-password'){
+        res='Contraseña incorrecta';
+      }
+    }
+    
+    catch(err){
       res = err.toString();
     }
     return res;
