@@ -1,24 +1,41 @@
+import 'dart:typed_data';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:image_picker/image_picker.dart';
+import 'package:instagram_clone_flutter/resources/auth_methods.dart';
 import 'package:instagram_clone_flutter/utils/colors.dart';
+import 'package:instagram_clone_flutter/utils/utils.dart';
 import 'package:instagram_clone_flutter/widgets/text_field_input.dart';
 
-class LoginScreen extends StatefulWidget {
-  const LoginScreen({Key? key}) : super(key: key);
+class SignupScreen extends StatefulWidget {
+  const SignupScreen({Key? key}) : super(key: key);
 
   @override
-  _LoginScreenState createState() => _LoginScreenState();
+  _SignupScreenState createState() => _SignupScreenState();
 }
 
-class _LoginScreenState extends State<LoginScreen> {
+class _SignupScreenState extends State<SignupScreen> {
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
+  final TextEditingController _bioController = TextEditingController();
+  final TextEditingController _usernameController = TextEditingController();
+  Uint8List? _image;
 
   @override
   void dispose() {
     super.dispose();
     _emailController.dispose();
     _passwordController.dispose();
+    _bioController.dispose();
+    _usernameController.dispose();
+  }
+
+  void selectImage() async {
+    Uint8List im = await pickImage(ImageSource.gallery);
+    setState(() {
+      _image = im;
+    });
   }
 
   @override
@@ -36,6 +53,36 @@ class _LoginScreenState extends State<LoginScreen> {
               SvgPicture.asset('assets/ic_instagram.svg',
                   color: primaryColor, height: 64),
               const SizedBox(height: 64),
+              //widet para imagen
+              Stack(
+                children: [
+                  _image != null?CircleAvatar(
+                    radius: 64,
+                    backgroundImage: MemoryImage(_image!),
+                  )
+                  :const CircleAvatar(
+                    radius: 64,
+                    backgroundImage: NetworkImage(
+                        'https://bysperfeccionoral.com/wp-content/uploads/2020/01/136-1366211_group-of-10-guys-login-user-icon-png.jpg'),
+                  ),
+                  Positioned(
+                      bottom: -10,
+                      left: 80,
+                      child: IconButton(
+                          onPressed: selectImage,
+                          icon: const Icon(Icons.add_a_photo)
+                      )
+                  )
+                ],
+              ),
+              const SizedBox(height: 24),
+              //username
+              TextFieldInput(
+                textEditingController: _usernameController,
+                hintText: ' Ingresa tu username',
+                textInputType: TextInputType.text,
+              ),
+              const SizedBox(height: 24),
               // text field input email
               TextFieldInput(
                 textEditingController: _emailController,
@@ -51,10 +98,26 @@ class _LoginScreenState extends State<LoginScreen> {
                 isPass: true,
               ),
               const SizedBox(height: 24),
+              TextFieldInput(
+                textEditingController: _bioController,
+                hintText: ' Ingresa tu biografia',
+                textInputType: TextInputType.text,
+              ),
+              const SizedBox(height: 24),
               // button login
               InkWell(
+                onTap: () async {
+                  String res = await AuthMethods().signUpUser(
+                    email: _emailController.text,
+                    password: _passwordController.text,
+                    username: _usernameController.text,
+                    bio: _bioController.text, 
+                    file: _image!
+                  );
+                  print(res);
+                },
                 child: Container(
-                  child: const Text('Log in'),
+                  child: const Text('Sign Up'),
                   width: double.infinity,
                   alignment: Alignment.center,
                   padding: const EdgeInsets.symmetric(vertical: 12),
@@ -65,7 +128,6 @@ class _LoginScreenState extends State<LoginScreen> {
                     color: blueColor,
                   ),
                 ),
-                
               ),
               const SizedBox(height: 12),
               Flexible(child: Container(), flex: 2),
@@ -76,9 +138,7 @@ class _LoginScreenState extends State<LoginScreen> {
                 children: [
                   Container(
                     child: const Text('No tienes una cuenta? '),
-                    padding: const EdgeInsets.symmetric(
-                      vertical: 8
-                    ),
+                    padding: const EdgeInsets.symmetric(vertical: 8),
                   ),
                   GestureDetector(
                     onTap: () {},
