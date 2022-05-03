@@ -18,13 +18,14 @@ class AuthMethods{
   }) async {
     String res = 'Ocurrio un error';
     try{
-      if(email.isNotEmpty || password.isNotEmpty || username.isNotEmpty || bio.isNotEmpty){
+      if(email.isNotEmpty || password.isNotEmpty || username.isNotEmpty || bio.isNotEmpty){// || file != null){
         // registrar usuario
         UserCredential cred = await _auth.createUserWithEmailAndPassword(email: email, password: password);
         
         print(cred.user!.uid);
 
-        //String photoUrl = await StorageMethods().uploadImageToStorage('profilePics', file, false);
+        String photoUrl = await StorageMethods().uploadImageToStorage('profilePics', file, false);
+
         //agregar usuario a BD
         await _firestore.collection('users').doc(cred.user!.uid).set({
           'username': username,
@@ -33,12 +34,12 @@ class AuthMethods{
           'bio': bio,
           'followers': [],
           'following': [],
-          //'photoUrl': photoUrl,
+          'photoUrl': photoUrl,
         });
-        res = 'succes';
-
+        res = 'success';
       }
-    } catch(err){
+    } 
+    catch(err){
         res = err.toString();
     }
     return res;
