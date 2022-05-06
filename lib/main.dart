@@ -17,11 +17,16 @@ void main() async {
   if (kIsWeb) {
     await Firebase.initializeApp(
       options: const FirebaseOptions(
-        apiKey: "AIzaSyCZ-xrXqD5D19Snauto-Fx_nLD7PLrBXGM",
-        appId: "1:585119731880:web:eca6e4b3c42a755cee329d",
-        messagingSenderId: "585119731880",
-        projectId: "instagram-clone-4cea4",
-        storageBucket: 'instagram-clone-4cea4.appspot.com'
+        apiKey: "AIzaSyDo8htWle8Mh8YfWdmZEjNNFaDfMshJ1zw",
+        appId: "1:336879357798:web:1bee24fad8be7f5f5982a7",
+        messagingSenderId: "336879357798",
+        projectId: "insta-flutter-658ab",
+        storageBucket: 'insta-flutter-658ab.appspot.com'
+        // apiKey: "AIzaSyCZ-xrXqD5D19Snauto-Fx_nLD7PLrBXGM",
+        // appId: "1:585119731880:web:eca6e4b3c42a755cee329d",
+        // messagingSenderId: "585119731880",
+        // projectId: "instagram-clone-4cea4",
+        // storageBucket: 'instagram-clone-4cea4.appspot.com'
       ),
     );
   } else {
